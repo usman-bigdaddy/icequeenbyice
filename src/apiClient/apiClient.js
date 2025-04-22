@@ -1,7 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
-const API_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
+const API_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.NEXT_PUBLIC_API_ENDPOINT
+    : process.env.NEXT_PUBLIC_PROD_API_ENDPOINT;
+//const API_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 const apiClient = axios.create({
   baseURL: API_URL,
