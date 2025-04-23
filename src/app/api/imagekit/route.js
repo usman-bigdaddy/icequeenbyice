@@ -2,15 +2,23 @@ import ImageKit from "imagekit";
 import config from "@/lib/config";
 import { NextResponse } from "next/server";
 
-// Destructure ImageKit credentials from config
+// Destructure from config
 const {
   env: {
-    imagekit: { publicKey, privateKey, urlEndpoint },
+    imagekit: { publicKey, privateKey, urlEndpoint, prodApiEndpoint },
   },
 } = config;
 
+// Select endpoint based on environment
+const isProduction = process.env.NODE_ENV === "production";
+const selectedEndpoint = isProduction ? prodApiEndpoint : urlEndpoint;
 
-const imagekit = new ImageKit({ publicKey, privateKey, urlEndpoint });
+// Init ImageKit
+const imagekit = new ImageKit({
+  publicKey,
+  privateKey,
+  urlEndpoint: selectedEndpoint,
+});
 
 export async function GET() {
   try {
