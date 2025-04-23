@@ -30,37 +30,38 @@ import {
   FilterIcon,
 } from "@heroicons/react/outline";
 import ConfirmAlert from "@/_components/ui/confirmAlert";
-import {
-  create_product,
-  get_all_products,
-  get_product,
-  edit_product,
-  delete_product,
-} from "@/store/products/product-thunk";
-import { useSelector, useDispatch } from "react-redux";
 import Product from "@/_components/ui/product";
 import Image from "next/image";
 import DiamondLoader from "@/components/ui/DiamondLoader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
 
 const Page = () => {
-  const { isLoading, all_Products, isFetched } = useSelector(
-    (state) => state.product
-  );
-  const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
   const [sort, setSort] = useState("newest");
 
   useEffect(() => {
-    if (!isFetched) {
-      dispatch(get_all_products());
-    }
-  }, [dispatch, isFetched]);
+    fetchProducts();
+  }, []);
 
-  const filteredProducts = all_Products
+  const fetchProducts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get("/api/products2");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredProducts = products
     .filter((product) => {
       if (filter === "featured") return product.featured;
       if (filter === "bestSeller") return product.bestSeller;
@@ -81,10 +82,6 @@ const Page = () => {
       return 0;
     });
 
-  const refreshProducts = () => {
-    dispatch(get_all_products());
-  };
-
   if (isLoading) {
     return <DiamondLoader />;
   }
@@ -99,15 +96,15 @@ const Page = () => {
               Manage Products
             </h1>
             <p className="text-pink-700 mt-1">
-              {all_Products.length}{" "}
-              {all_Products.length === 1 ? "product" : "products"} available
+              {products.length} {products.length === 1 ? "product" : "products"}{" "}
+              available
             </p>
           </div>
           <div className="flex gap-2">
             <Button
               variant="outline"
               size="sm"
-              onClick={refreshProducts}
+              onClick={fetchProducts}
               className="text-pink-700 border-pink-200 hover:bg-pink-50"
             >
               <RefreshIcon className="h-4 w-4 mr-2" />
@@ -118,6 +115,7 @@ const Page = () => {
               btnTxt="Add Product"
               btnStyle="w-full text-white font-semibold text-md bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-3 rounded-lg hover:from-pink-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200"
               triggerTxt="Add Product"
+              onSuccess={fetchProducts} // Refresh list after adding
             />
           </div>
         </div>
@@ -222,7 +220,6 @@ const Page = () => {
                       </div>
                     </TableCell>
 
-                    {/* Details Column */}
                     <TableCell className="px-6 py-4">
                       <div className="space-y-1">
                         <TooltipProvider>
@@ -251,7 +248,6 @@ const Page = () => {
                       </div>
                     </TableCell>
 
-                    {/* Inventory Column */}
                     <TableCell className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         <div>
@@ -300,7 +296,6 @@ const Page = () => {
                       </div>
                     </TableCell>
 
-                    {/* Status Column */}
                     <TableCell className="px-6 py-4">
                       <div className="flex flex-wrap gap-2">
                         {product.featured && (
@@ -360,6 +355,7 @@ const Page = () => {
                               trending: product.trending,
                               price: product.price,
                             }}
+                            onSuccess={fetchProducts} // Refresh list after editing
                           />
                           <ConfirmAlert
                             triggerTxt={
@@ -372,6 +368,7 @@ const Page = () => {
                             btnTxt="Delete"
                             btnStyle="w-full text-white font-medium bg-gradient-to-r from-rose-500 to-red-500 px-4 py-2 rounded-lg hover:from-rose-600 hover:to-red-600 transition-all duration-200"
                             product_id={product.id}
+                            onSuccess={fetchProducts} // Refresh list after deleting
                           />
                         </PopoverContent>
                       </Popover>
@@ -402,6 +399,7 @@ const Page = () => {
                         btnTxt="Add Product"
                         btnStyle="w-full text-white font-semibold text-md bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-3 rounded-lg hover:from-pink-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200"
                         triggerTxt="Add Product"
+                        onSuccess={fetchProducts} // Refresh list after adding
                       />
                     </div>
                   </TableCell>
