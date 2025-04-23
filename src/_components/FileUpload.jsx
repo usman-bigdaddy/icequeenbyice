@@ -15,7 +15,7 @@ const { publicKey, urlEndpoint } = imagekit;
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${apiEndpoint}/api/imagekit`);
+    const response = await fetch(`/api/imagekit`);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -66,10 +66,10 @@ const FileUpload = ({
   const onSuccess = (res) => {
     toast.success(`Image uploaded successfully`);
     setFile(res);
-    
+
     // Create the full image URL by combining the urlEndpoint and filePath
     const fullImageUrl = `${urlEndpoint}${res.filePath}`;
-    onFileChange(fullImageUrl);  // Pass the full URL to the parent component
+    onFileChange(fullImageUrl); // Pass the full URL to the parent component
   };
 
   const onValidate = (file) => {
@@ -91,7 +91,7 @@ const FileUpload = ({
   return (
     <ImageKitProvider
       publicKey={publicKey}
-      urlEndpoint={urlEndpoint}  // Pass urlEndpoint to ImageKitProvider
+      urlEndpoint={urlEndpoint} // Pass urlEndpoint to ImageKitProvider
       authenticator={authenticator}
     >
       <IKUpload
