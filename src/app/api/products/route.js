@@ -4,8 +4,8 @@ import { products, SIZE_ENUM } from "../../../../database/schema";
 import { eq } from "drizzle-orm";
 
 const validateToken = async (request) => {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.split(' ')[1];
+  const authHeader = request.headers.get("authorization");
+  const token = authHeader?.split(" ")[1];
 
   if (!token) {
     console.log(token);
@@ -13,8 +13,10 @@ const validateToken = async (request) => {
   }
 
   try {
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    if (!payload.role || !['ADMIN', 'SUPER_ADMIN'].includes(payload.role)) {
+    const payload = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString()
+    );
+    if (!payload.role || !["ADMIN", "SUPER_ADMIN"].includes(payload.role)) {
       return { error: "Forbidden: Admins only", status: 403 };
     }
     return payload;
@@ -60,7 +62,6 @@ export async function GET(request) {
   }
 }
 
-
 // POST - Admin only
 export async function POST(request) {
   const token = await validateToken(request);
@@ -68,19 +69,21 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const requiredFields = ['name', 'fabricType','bestSeller', 'trending', 'size', 'width', 'price', 'quantity', 'images'];
+    // const requiredFields = ['name', 'fabricType','bestSeller', 'trending', 'size', 'width', 'price', 'quantity', 'images'];
 
-    if (requiredFields.some(field => !body[field])) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
+    // if (requiredFields.some(field => !body[field])) {
+    //   return NextResponse.json(
+    //     { error: "Missing required fields" },
+    //     { status: 400 }
+    //   );
+    // }
 
     // Validate size enum
     if (!SIZE_ENUM.enumValues.includes(body.size)) {
       return NextResponse.json(
-        { error: `Invalid size value. Must be one of: ${SIZE_ENUM.enumValues.join(', ')}` },
+        {
+          error: `Invalid size value. Must be one of: ${SIZE_ENUM.enumValues.join(", ")}`,
+        },
         { status: 400 }
       );
     }
@@ -93,14 +96,15 @@ export async function POST(request) {
       );
     }
 
-    const [newProduct] = await db.insert(products)
+    const [newProduct] = await db
+      .insert(products)
       .values({
         ...body,
         createdAt: new Date(),
         updatedAt: new Date(),
         featured: body.featured ?? false,
         visibility: body.visibility ?? true,
-        deleted: false
+        deleted: false,
       })
       .returning();
 
@@ -127,15 +131,26 @@ export async function PUT(request) {
     const body = await request.json();
 
     const updateData = {
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     const allowedFields = [
-      'name', 'fabricType', 'size', 'width', 'length','bestSeller', 'trending',
-      'price', 'quantity', 'images', 'featured', 'length','description'
+      "name",
+      "fabricType",
+      "size",
+      "width",
+      "length",
+      "bestSeller",
+      "trending",
+      "price",
+      "quantity",
+      "images",
+      "featured",
+      "length",
+      "description",
     ];
 
-    allowedFields.forEach(field => {
+    allowedFields.forEach((field) => {
       if (body[field] !== undefined) {
         updateData[field] = body[field];
       }
@@ -144,7 +159,9 @@ export async function PUT(request) {
     // Validate size enum if provided
     if (body.size && !SIZE_ENUM.enumValues.includes(body.size)) {
       return NextResponse.json(
-        { error: `Invalid size value. Must be one of: ${SIZE_ENUM.enumValues.join(', ')}` },
+        {
+          error: `Invalid size value. Must be one of: ${SIZE_ENUM.enumValues.join(", ")}`,
+        },
         { status: 400 }
       );
     }
@@ -157,7 +174,8 @@ export async function PUT(request) {
       );
     }
 
-    const [updatedProduct] = await db.update(products)
+    const [updatedProduct] = await db
+      .update(products)
       .set(updateData)
       .where(eq(products.id, id))
       .returning();
@@ -165,13 +183,12 @@ export async function PUT(request) {
     return updatedProduct
       ? NextResponse.json(updatedProduct)
       : NextResponse.json({ error: "Product not found" }, { status: 404 });
-
   } catch (error) {
     console.error("PUT error:", error);
     return NextResponse.json(
       {
         error: "Failed to update product",
-        details: error.message
+        details: error.message,
       },
       { status: 400 }
     );
@@ -188,11 +205,12 @@ export async function DELETE(request) {
     const id = searchParams.get("id");
     if (!id) throw new Error("Missing ID");
 
-    const [result] = await db.update(products)
+    const [result] = await db
+      .update(products)
       .set({
         deleted: true,
-        visibility: false,  // Force visibility to false when deleting
-        updatedAt: new Date()
+        visibility: false, // Force visibility to false when deleting
+        updatedAt: new Date(),
       })
       .where(eq(products.id, id))
       .returning({ deletedId: products.id });
@@ -207,4 +225,3 @@ export async function DELETE(request) {
     );
   }
 }
-
