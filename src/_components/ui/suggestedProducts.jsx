@@ -1,18 +1,47 @@
 "use client";
-import React from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { CiCirclePlus } from "react-icons/ci";
 import useInView from "@/hooks/useInView";
+import { useSelector, useDispatch } from "react-redux";
+import Link from "next/link";
+import { getGuestId } from "@/utils/getGeustId";
+import { addToCart } from "@/store/customer/cart/cart-slice";
+import fastcart from "@/assets/cartdown.png";
+import { Button } from "@/components/ui/button";
 
 const SuggestedProducts = ({ bg, style }) => {
   const { ref: suggestRef, isVisible: showSuggested } = useInView();
+  const { bestSellers } = useSelector((state) => state.customerProducts);
 
-  const randomProducts = carouselItems
-    .filter((item) => item.title !== "fr")
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 4);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { addLoadingId, cartLoading } = useSelector((state) => state.cart);
+
+  const userId = isAuthenticated ? user?.id : null;
+  const guestId = !isAuthenticated ? getGuestId() : null;
+  const dispatch = useDispatch();
+
+  const addItemToCart = (productId) => {
+    const userOrGuestId = isAuthenticated ? userId : guestId;
+    // const action = "increment";
+    const quantity = count[productId] || 1;
+    const payload = {
+      productId,
+      quantity,
+    };
+
+    if (isAuthenticated && userOrGuestId) {
+      payload.userId = userOrGuestId;
+    } else if (!isAuthenticated && userOrGuestId) {
+      payload.guestId = userOrGuestId;
+    }
+    dispatch(addToCart(payload));
+  };
+
   return (
-    <div className={`relative md:px-40 md:pb-20 md:pt-10 ${style}`}>
+    <div
+      className={`relative px-5 py-10 md:px-40 2xl:px-80 md:pb-20 md:pt-10 ${style}`}
+    >
       {!bg && (
         <div className="absolute inset-0 bg-[url('/diamondsbg.svg')] bg-cover opacity-40 z-0" />
       )}
@@ -23,23 +52,44 @@ const SuggestedProducts = ({ bg, style }) => {
         <h2 className="mb-5 text-2xl font-semibold text-[#3D3D3D] z-10">
           You May Also Like
         </h2>
-        <div className="flex md:flex-row md:gap-8 z-10">
-          {randomProducts.map((product, i) => (
+        <div className="flex flex-col gap-3 md:flex-row md:gap-8 z-10">
+          {bestSellers?.map((product) => (
             <div
-              key={i}
+              key={product?.id}
               className="flex  flex-col md:h-[350px] md:w-[25%] bg-transparent z-10"
             >
-              <Image
-                alt="product"
-                src={product.img}
-                className="h-[250px] w-full rounded-xl"
-              />
-              <p className="text-[#404040] text-[16px] font-normal mt-1">
-                Test Item
+              <Link href={`/customer/product/${product?.id}`}>
+                <img
+                  alt="product"
+                  src={product?.images[0]}
+                  className="h-[250px] w-full rounded-xl object-cover"
+                />
+              </Link>
+              <p className="text-pink-500 text-[16px] font-serif mt-1">
+                {product?.name}
               </p>
               <div className="flex flex-row justify-between items-center w-full mt-1">
-                <p className="text-[16px] font-semibold">N200,000</p>
-                <CiCirclePlus className="size-6 hover:cursor-pointer" />
+                <p className="text-[14px] font-semibold font-serif ">
+                  {Number(product?.price).toLocaleString("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                  })}
+                </p>
+                <Button
+                  className="bg-gray-100 hover:bg-pink-50 rounded-full p-1.5 shadow-sm border border-gray-200 transition-colors hover:cursor-pointer"
+                  onClick={() => addItemToCart(product?.id)}
+                  disabled={addLoadingId === product?.id}
+                >
+                  {addLoadingId === product?.id ? (
+                    <div className="w-4 h-4 animate-spin border-2 border-pink-500 border-t-transparent rounded-full" />
+                  ) : (
+                    <img
+                      src={fastcart.src}
+                      alt="cart-icon"
+                      className="size-4 sm:size-5 md:size-6"
+                    />
+                  )}
+                </Button>
               </div>
             </div>
           ))}

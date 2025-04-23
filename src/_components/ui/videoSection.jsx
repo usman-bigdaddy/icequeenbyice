@@ -13,7 +13,7 @@ const VideoSection = () => {
   const { ref: text, isVisible: showTextContent } = useInView();
   const { ref: subs, isVisible: showSubs } = useInView();
   return (
-    <div className="relative w-full flex flex-col md:pt-10 md:px-40 px-4 pb-20">
+    <div className="relative w-full flex flex-col md:pt-10 md:px-40 2xl:px-80 px-4 pb-20">
       <div className="absolute inset-0 bg-[url('/diamondsbg.svg')] bg-cover opacity-40 z-0" />
 
       <div className="flex flex-col items-start z-10">

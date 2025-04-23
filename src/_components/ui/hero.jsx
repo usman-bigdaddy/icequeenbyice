@@ -77,7 +77,7 @@ const Hero = () => {
   const item = carouselItems[activeIndex];
 
   return (
-    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[80vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
+    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[55vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
       <div className="w-full absolute inset-0 h-full z-0">
         <SparklesCore
           id="tsparticlesfullpage"
@@ -106,7 +106,7 @@ const Hero = () => {
         setIsSidebarOpen={setIsSidebarOpen}
       />
 
-      <div className="flex justify-between items-center h-[8vh] md:h-[10vh] relative z-50">
+      <div className="flex justify-between items-center h-[6vh] md:h-[10vh] relative z-50">
         <Image
           src={logo}
           alt="logo"
@@ -204,28 +204,31 @@ const Hero = () => {
       <div className="h-full flex items-center relative z-20 mt-[-20px] md:mt-0">
         <div
           key={`slide-${activeIndex}`}
-          className="flex flex-col-reverse md:flex-row gap-6 md:gap-10 items-center justify-between w-full text-white animate-fade-in"
+          className="flex flex-row gap-0 md:gap-10 items-center justify-between w-full text-white animate-fade-in"
         >
-          <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2">
+          <div className="w-[30%] md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2">
             {item.titleLines.map((line, i) => (
               <p
                 key={i}
-                className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold leading-tight"
               >
                 {line}
               </p>
             ))}
-            <Button className="mx-auto md:mx-0 w-[220px] md:w-[250px] py-3 md:py-5 px-6 md:px-8 rounded-3xl bg-black/80 text-white text-sm md:text-md font-semibold hover:bg-white hover:text-[#F9689F] transition mt-4">
-              <span>Explore Our Collection</span>
-              <IoIosArrowForward size={20} className="ml-2" />
-            </Button>
+            <Link
+              href="/customer/product"
+              className="mx-auto md:mx-0 w-full max-w-[220px] md:max-w-[250px] py-2 md:py-4 px-4 md:px-6 rounded-3xl bg-black/80 text-white text-sm md:text-base font-semibold hover:bg-white hover:text-[#F9689F] transition flex items-center justify-center gap-x-1 mt-4"
+            >
+              <span className="truncate">Explore Our Collection</span>
+              <IoIosArrowForward size={16} />
+            </Link>
           </div>
 
-          <div className="flex w-full md:w-1/2 justify-center items-end">
+          <div className="flex w-[70%] md:w-1/2 justify-center items-end">
             <img
               src={item.image.src}
               alt={`carousel-${activeIndex}`}
-              className="w-full h-[250px] md:h-[80%] object-contain lg:object-cover self-end"
+              className="w-full !h-[500px] md:h-[80%] object-contain lg:object-cover self-end"
             />
           </div>
         </div>

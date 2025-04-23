@@ -79,7 +79,10 @@ const page = () => {
 
   return (
     <>
-      <div className="relative px-4 md:px-40 flex flex-col py-4 md:py-7 bg-gray-100 min-h-screen">
+      <div
+        key={id}
+        className="relative px-4 md:px-40 2xl:px-80 flex flex-col py-4 md:py-7 bg-gray-100 min-h-screen"
+      >
         {loading && (
           <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-xs bg-white/60">
             <Image
@@ -117,7 +120,6 @@ const page = () => {
               : "opacity-100 translate-y-0"
           }`}
         >
-          {/* Image Gallery Section */}
           <div className="flex flex-col md:flex-row w-full md:w-1/2 items-center gap-4">
             <div className="flex flex-row md:flex-col w-full md:w-[25%] gap-2 md:h-[400px] overflow-y-auto">
               {singleProduct?.images.map((imgSrc, i) => (
@@ -141,7 +143,6 @@ const page = () => {
             </div>
           </div>
 
-          {/* Details Section */}
           <div className="flex flex-col w-full md:w-1/2 z-10">
             <h1 className="text-[#2D2D2D] text-xl md:text-2xl font-semibold mb-2">
               {singleProduct?.name}
@@ -159,7 +160,6 @@ const page = () => {
               Fabric Type: {singleProduct?.fabricType}
             </p>
 
-            {/* Counter & Cart Button */}
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
               <div className="flex flex-row justify-center items-center gap-4 px-4 py-2 w-full sm:w-[40%] bg-white rounded-3xl">
                 <button
@@ -190,7 +190,6 @@ const page = () => {
               </button>
             </div>
 
-            {/* View Cart Button */}
             <Link
               href="#"
               className="w-full py-2 border border-[#414141] rounded-3xl mt-4 text-center bg-white text-sm"
@@ -198,7 +197,6 @@ const page = () => {
               View Cart
             </Link>
 
-            {/* Shipping Info */}
             <div className="flex flex-row items-start gap-3 mt-4">
               <LiaShippingFastSolid className="size-6 text-[#DE0D6F]" />
               <p className="text-[#414141] text-sm">
@@ -215,7 +213,7 @@ const page = () => {
         </div>
       </div>
 
-      {/* <SuggestedProducts /> */}
+      <SuggestedProducts />
     </>
   );
 };

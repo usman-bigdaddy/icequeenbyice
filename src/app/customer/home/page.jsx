@@ -87,7 +87,7 @@ const page = () => {
   const responsive = {
     desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
     tablet: { breakpoint: { max: 1024, min: 640 }, items: 2 },
-    mobile: { breakpoint: { max: 640, min: 0 }, items: 1 },
+    mobile: { breakpoint: { max: 640, min: 0 }, items: 2 },
   };
 
   const FeaturedResponsive = {
@@ -149,7 +149,7 @@ const page = () => {
             title="NEW PRODUCTS"
             subtitle="Discover the Latest Arrivals and Set the Trend."
           />
-          <div className="w-full md:pb-5">
+          <div className="w-full pb-3 md:pb-5">
             <Carousel
               responsive={responsive}
               infinite={true}
@@ -164,13 +164,13 @@ const page = () => {
               {newProducts?.map((item) => (
                 <div
                   key={item?.id}
-                  className="w-[270px] h-[400px] sm:w-[300px] sm:h-[420px] md:w-[330px] md:h-[450px] 2xl:w-[470px] 2xl:h-[550px] flex flex-col items-center justify-start mx-auto"
+                  className="w-[150px] h-[350px] sm:w-[300px] sm:h-[420px] md:w-[330px] md:h-[450px] 2xl:w-[470px] 2xl:h-[550px] flex flex-col items-center justify-start mx-auto"
                 >
                   <Link href={`/customer/product/${item?.id}`}>
                     <img
                       src={item?.images[0]}
                       alt={item?.name}
-                      className="w-[270px] h-[280px] sm:w-[300px] sm:h-[300px] md:w-[330px] md:h-[330px] 2xl:w-[470px] 2xl:h-[470px] object-cover rounded-lg"
+                      className="w-[150px] h-[220px] sm:w-[300px] sm:h-[300px] md:w-[330px] md:h-[330px] 2xl:w-[470px] 2xl:h-[470px] object-cover rounded-lg"
                       loading="lazy"
                     />
                   </Link>
@@ -212,7 +212,7 @@ const page = () => {
               ))}
             </Carousel>
           </div>
-          <div className="flex justify-end z-10 w-full mt-10">
+          <div className="flex justify-end z-10 w-full md:mt-10">
             <Link
               className="px-4 py-2 rounded-xl bg-[#FD7DC3] hover:animate-pulse text-white"
               href="/customer/product"
