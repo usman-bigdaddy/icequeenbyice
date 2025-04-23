@@ -18,7 +18,7 @@ const selectedEndpoint = prodApiEndpoint;
 const imagekit = new ImageKit({
   publicKey,
   privateKey,
-  urlEndpoint: selectedEndpoint,
+  urlEndpoint: prodApiEndpoint,
 });
 
 export async function GET() {
