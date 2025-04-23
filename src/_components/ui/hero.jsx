@@ -77,7 +77,7 @@ const Hero = () => {
   const item = carouselItems[activeIndex];
 
   return (
-    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[70vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
+    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[80vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
       <div className="w-full absolute inset-0 h-full z-0">
         <SparklesCore
           id="tsparticlesfullpage"
@@ -204,7 +204,7 @@ const Hero = () => {
       <div className="h-full flex items-center relative z-20 mt-[-20px] md:mt-0">
         <div
           key={`slide-${activeIndex}`}
-          className="flex flex-col md:flex-row gap-6 md:gap-10 items-center justify-between w-full text-white animate-fade-in"
+          className="flex flex-col-reverse md:flex-row gap-6 md:gap-10 items-center justify-between w-full text-white animate-fade-in"
         >
           <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2">
             {item.titleLines.map((line, i) => (
@@ -221,12 +221,11 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Only show image on large screens */}
-          <div className="hidden lg:flex w-full md:w-1/2 justify-center items-end">
+          <div className="flex w-full md:w-1/2 justify-center items-end">
             <img
               src={item.image.src}
               alt={`carousel-${activeIndex}`}
-              className="w-full h-[80%] object-contain lg:object-cover self-end"
+              className="w-full h-[250px] md:h-[80%] object-contain lg:object-cover self-end"
             />
           </div>
         </div>

@@ -122,7 +122,7 @@ const page = () => {
       <Hero />
 
       <div
-        className={`flex flex-col items-center bg-gray-200  pb-10 md:pb-20 relative ${loading ? "min-h-screen" : ""}`}
+        className={`flex flex-col items-center bg-gray-200   pb-10 md:pb-20 relative ${loading ? "min-h-screen" : ""}`}
       >
         {/* <div className="absolute inset-0 bg-[url('/diamondsbg.svg')] bg-cover opacity-40 z-0" /> */}
         {loading ||
@@ -249,7 +249,7 @@ const page = () => {
                 <div
                   key={item?.id}
                   className="flex flex-col bg-gradient-to-b from-white to-[#FFB6C1] bg-opacity-30 py-2 px-2 rounded-lg 
-                  w-[180px] h-[300px] 
+                  w-[160px] h-[260px] 
                  md:w-[250px] md:h-[380px]
                   2xl:w-[370px] 2xl:h-[500px] 
                   mx-auto"
@@ -262,7 +262,7 @@ const page = () => {
                     <img
                       src={item?.images[0]}
                       alt="product-image"
-                      className="w-[170px] h-[170px] 
+                      className="w-[150px] h-[150px] 
   md:w-[250px] md:h-[250px]
     2xl:w-[370px] 2xl:h-[370px] 
     object-cover rounded-lg"
@@ -272,17 +272,17 @@ const page = () => {
 
                   <div className="flex flex-col w-full pt-2">
                     <Link href={`/customer/product/${item?.id}`}>
-                      <p className="text-sm md:text-lg md:font-semibold text-gray-800 h-[56px] overflow-hidden">
+                      <p className="text-sm md:text-lg md:font-semibold text-gray-800 md:h-[56px] overflow-hidden">
                         {item?.name}
                       </p>
                     </Link>
-                    <div className="flex felx-row justify-between items-center mt-3">
+                    <div className="flex flex-row justify-between items-center mt-5 md:mt-3">
                       <Link href={`/customer/product/${item?.id}`}>
                         <div className="flex flex-row items-center gap-2">
                           <Image
                             src={naira}
                             alt="naira-icon"
-                            className="size-10"
+                            className="size-7 md:size-10"
                           />
                           <p className="text-sm md:text-lg font-bold text-gray-700">
                             {Number(item?.price).toLocaleString(undefined, {
@@ -300,10 +300,7 @@ const page = () => {
                         {addLoadingId === item?.id ? (
                           <div className="w-4 h-4 animate-spin border-2 border-pink-300 border-t-transparent rounded-full" />
                         ) : (
-                          <FaCartArrowDown
-                            size={35}
-                            className="hover:cursor-pointer hover:animate-pulse"
-                          />
+                          <FaCartArrowDown className="hover:cursor-pointer hover:animate-pulse size-[25px] md:size-[35px]" />
                         )}
                       </button>
                     </div>

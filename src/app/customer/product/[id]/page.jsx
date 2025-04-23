@@ -79,7 +79,7 @@ const page = () => {
 
   return (
     <>
-      <div className="relative px-4 md:px-40 flex flex-col md:py-7 bg-gray-100 min-h-screen">
+      <div className="relative px-4 md:px-40 flex flex-col py-4 md:py-7 bg-gray-100 min-h-screen">
         {loading && (
           <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-xs bg-white/60">
             <Image

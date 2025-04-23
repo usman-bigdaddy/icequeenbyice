@@ -21,11 +21,14 @@ import {
 } from "@/components/ui/popover";
 import { get_all_products } from "@/store/customer/products/products-slice";
 import { AiOutlineLogout } from "react-icons/ai";
+import { IoFilterOutline } from "react-icons/io5";
 
 const CustomerNavBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { items } = useSelector((state) => state.cart);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   const navLinks = [
     { name: "Home", link: "/customer/home" },
@@ -58,6 +61,13 @@ const CustomerNavBar = () => {
     dispatch(get_all_products());
   };
 
+  const [open, setOpen] = useState(false);
+
+  const handleClick = (type) => {
+    // dispatch
+    setOpen(false);
+  };
+
   return (
     <div className="relative bg-[#F9689F] px-5 md:px-40 py-5 flex flex-row justify-between items-center w-[100vw] !h-[80px]">
       <div className="w-full absolute inset-0 h-full z-0">
@@ -77,8 +87,8 @@ const CustomerNavBar = () => {
         setIsSidebarOpen={setIsSidebarOpen}
       />
 
-      <div className="flex flex-row items-center gap-5 z-10">
-        <Image src={logo} alt="logo" className="w-[200px]" />
+      <div className="flex flex-row sm:justify-between items-center gap-5 z-10">
+        <Image src={logo} alt="logo" className="w-[120px] md:w-[200px]" />
         <div className="hidden md:flex flex-row gap-5">
           {navLinks.map((link, index) => (
             <Link
@@ -100,21 +110,89 @@ const CustomerNavBar = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center gap-5 z-10 me-2">
+      <div className="flex flex-row items-center md:gap-5 z-10 me-2">
         <div
-          className={`flex justify-between items-center gap-3 py-1 px-3 bg-gray-50 rounded-2xl w-[200px] ${pathname.startsWith("/customer/product/") ? "hidden" : ""}`}
+          className={`flex justify-between items-center gap-3 py-1 px-3 bg-gray-50 rounded-2xl me-1 w-[150px] md:w-[200px] ${pathname === "/customer/product" ? "" : "hidden"}`}
         >
-          <input
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <IoFilterOutline
+                size={20}
+                className="text-gray-600 hover:cursor-pointer"
+              />
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-4 space-y-4">
+              <div className="text-sm font-semibold text-gray-700  pb-2">
+                Filter By Price
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => handleClick("lowest")}
+                  className="w-full px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition"
+                >
+                  Lowest Price
+                </button>
+                <button
+                  onClick={() => handleClick("highest")}
+                  className="w-full px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition"
+                >
+                  Highest Price
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
+          {/* <input
             type="text"
             className="bg-transparent py-1 px-1 text-md w-[80%] focus:outline-none"
             placeholder="Search"
-          />
+          /> */}
+          <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+            <PopoverTrigger asChild>
+              <div className="relative  md:w-full">
+                <input
+                  type="text"
+                  value={query}
+                  onFocus={() => setSearchOpen(true)}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="bg-transparent py-1 px-1 text-md w-full focus:outline-none"
+                  placeholder="Search"
+                />
+              </div>
+            </PopoverTrigger>
+
+            {query && (
+              <PopoverContent className="w-full p-2 max-h-60 overflow-y-auto shadow-md rounded-md">
+                {results.length > 0 ? (
+                  <ul className="space-y-1">
+                    {results.map((item) => (
+                      <Link href={`/customer/product/${item?.id}`}>
+                        <li
+                          key={index}
+                          className="flex flex-row items-center p-2 gap-2"
+                          onClick={() => {
+                            setSearchOpen(false);
+                          }}
+                        >
+                          <img src="" alt="" /> <p>{item.name}</p>
+                        </li>
+                      </Link>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="text-sm text-gray-500 p-2">
+                    No results found
+                  </div>
+                )}
+              </PopoverContent>
+            )}
+          </Popover>
+
           <button className="hover:cursor-pointer">
             <IoMdSearch size={20} className="text-gray-600" />
           </button>
         </div>
-        <Link href="/customer/cart" className="relative">
-          <PiHandbagSimpleLight size={30} className="text-white font-bold" />
+        <Link href="/customer/cart" className="relative me-2 md:me-0">
+          <PiHandbagSimpleLight className="text-white font-bold text-[25px] md:text-[30px]" />
           <span className="bg-red-500 text-white absolute bottom-3 rounded-full text-sm font-medium -right-4 px-2 py-1 h-6 flex items-center justify-center text-center hover:cursor-pointer">
             {totalItems ?? 0}
           </span>

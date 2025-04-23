@@ -8,14 +8,14 @@ const PageSectionHeader = ({
 }) => {
   return (
     <div className="flex flex-col items-center mb-16 text-center">
-      <div className="flex items-center justify-center space-x-6 mb-4">
+      <div className="flex items-center justify-center space-x-3 md:space-x-6 mb-4">
         <Image
           width={40}
           src={icon}
           alt="section-icon"
           className="animate-pulse"
         />
-        <h1 className="text-3xl font-serif tracking-widest text-gray-800 uppercase">
+        <h1 className="text-lg md:text-3xl font-serif tracking-widest text-gray-800 uppercase">
           {title}
         </h1>
         <Image

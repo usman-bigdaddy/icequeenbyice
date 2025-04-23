@@ -70,7 +70,7 @@ export default function CustomCarousel() {
   };
 
   return (
-    <div className=" w-full flex flex-col items-center md:pt-5 px-5 2xl:px-auto pb-12 bg-gray-50">
+    <div className=" w-full flex flex-col items-center pt-5 px-5 2xl:px-auto pb-12 bg-gray-50">
       {/* <div className="absolute inset-0 bg-[url('/diamondsbg.svg')] bg-cover opacity-40 z-0" /> */}
 
       <div
@@ -99,7 +99,7 @@ export default function CustomCarousel() {
             {trendingProducts?.map((item) => (
               <div
                 key={item?.id}
-                className="w-[180px] h-[270px] 
+                className="w-[158px] h-[270px] 
                          md:w-[250px] md:h-[330px] 
                          2xl:w-[250px] 2xl:h-[350px] 
                          relative"
@@ -117,10 +117,10 @@ export default function CustomCarousel() {
                   />
 
                   <div className="absolute left-2 bottom-2 bg-white/90 px-4 py-2 rounded-2xl shadow-md text-sm">
-                    <p className="font-serif text-pink-500 font-semibold">
+                    <p className="text-sm md:text-lg font-serif text-pink-500 font-semibold">
                       {item?.name}
                     </p>
-                    <p className="font-serif text-gray-700">
+                    <p className=" text-sm md:text-lg font-serif text-gray-700">
                       {Number(item?.price).toLocaleString("en-NG", {
                         style: "currency",
                         currency: "NGN",
