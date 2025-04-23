@@ -26,7 +26,8 @@ const supportLinks = [
 
 const Footer = () => {
   return (
-    <div className="relative w-[100vw]  pt-10 bg-[#F9689F] pb-5 flex flex-col">
+    <footer className="relative w-full pt-10 bg-[#F9689F] pb-5 flex flex-col overflow-hidden">
+      {/* Sparkles background */}
       <div className="w-full absolute inset-0 h-full z-0">
         <SparklesCore
           id="particles"
@@ -38,83 +39,107 @@ const Footer = () => {
           particleColor="#FFFFFF"
         />
       </div>
-      <div className="flex flex-start md:px-10 z-10">
-        <Image src={logo} alt="logo" className="w-[220px] h-[100px]" />
-      </div>
-      {/* <div className="flex flex-col justify-center items-center mt-2 md:px-40">
-        <p className="text-2xl text-white font-extralight">
-          Subscribe To Your Newsletter to Stay Updated About Discounts
-        </p>
-        <p className="text-2xl text-white font-extralight">
-          Updated About Discounts
-        </p>
-        <div className="inline-flex justify-between items-center px-4 py-1 bg-[#D45987] rounded-4xl mt-5 ">
-          <input
-            type="email"
-            className="bg-transparent p-2 focus:outline-none"
-            placeholder="person@email.com"
-          />
-          <button className="bg-black/80 text-white text-[16px] p-2  text-lg rounded-full hover:animate-pulse hover:cursor-pointer">
-            <IoIosArrowForward />
-          </button>
-        </div>
-      </div> */}
 
-      <div className="flex md:flex-row  flex-wrap gap-y-10 md:gap-y-0 justify-between items-start w-full mt-2 px-10 md:px-40 pb-10 z-10">
-        <div className="flex flex-col gap-2 md:gap-4 w-full sm:w-1/2 md:w-auto">
-          <h2 className="text-xl font-semibold text-black mb-2">Products</h2>
-          {products.map((item, index) => (
-            <Link
-              href={item.link}
-              className="text-gray-100 text-[14px] font-extralight hover:cursor-pointer"
-              key={index}
-            >
-              {item.title}
-            </Link>
-          ))}
+      {/* Main content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 z-10">
+        {/* Logo */}
+        <div className="flex justify-center md:justify-start">
+          <Image
+            src={logo}
+            alt="logo"
+            className="w-44 md:w-52 h-auto max-h-24 object-contain"
+            priority
+          />
         </div>
-        <div className="flex flex-col gap-2 md:gap-4">
-          <h2 className="text-xl font-semibold text-black mb-2">Support</h2>
-          {supportLinks.map((item, index) => (
-            <Link
-              href={item.link}
-              className="text-gray-100 text-[14px] font-extralight hover:cursor-pointer"
-              key={index}
-            >
-              {item.title}
-            </Link>
-          ))}
+
+        {/* Links grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 md:mt-12">
+          {/* Products column */}
+          <div className="flex flex-col">
+            <h2 className="text-xl font-semibold text-black mb-4">Products</h2>
+            <div className="flex flex-col gap-3">
+              {products.map((item, index) => (
+                <Link
+                  href={item.link}
+                  className="text-gray-100 text-base font-light hover:text-white transition-colors duration-200"
+                  key={`product-${index}`}
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Support column */}
+          <div className="flex flex-col">
+            <h2 className="text-xl font-semibold text-black mb-4">Support</h2>
+            <div className="flex flex-col gap-3">
+              {supportLinks.map((item, index) => (
+                <Link
+                  href={item.link}
+                  className="text-gray-100 text-base font-light hover:text-white transition-colors duration-200"
+                  key={`support-${index}`}
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Other Pages column */}
+          <div className="flex flex-col">
+            <h2 className="text-xl font-semibold text-black mb-4">
+              Other Pages
+            </h2>
+            <div className="flex flex-col gap-3">
+              {otherpages.map((item, index) => (
+                <Link
+                  href={item.link}
+                  className="text-gray-100 text-base font-light hover:text-white transition-colors duration-200"
+                  key={`page-${index}`}
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-2 md:gap-4">
-          <h2 className="text-xl font-semibold text-black mb-2">Other Pages</h2>
-          {otherpages.map((item, index) => (
-            <Link
-              href={item.link}
-              className="text-gray-100 text-[14px] font-extralight hover:cursor-pointer"
-              key={index}
+
+        {/* Newsletter (uncomment if needed) */}
+        {/* <div className="mt-12 max-w-2xl mx-auto text-center">
+          <h3 className="text-2xl text-white font-light mb-4">
+            Subscribe To Our Newsletter to Stay Updated About Discounts
+          </h3>
+          <div className="flex max-w-md mx-auto bg-[#D45987] rounded-full px-4 py-2 focus-within:ring-2 focus-within:ring-white/50">
+            <input
+              type="email"
+              className="flex-grow bg-transparent px-4 py-2 text-white placeholder-gray-200 focus:outline-none"
+              placeholder="person@email.com"
+            />
+            <button className="bg-black/80 text-white p-2 rounded-full hover:bg-black transition-colors duration-200">
+              <IoIosArrowForward size={20} />
+            </button>
+          </div>
+        </div> */}
+
+        {/* Copyright */}
+        <div className="mt-12 pt-4 border-t border-white/20 flex flex-col sm:flex-row justify-center items-center gap-2 text-sm text-white">
+          <p>&copy; {new Date().getFullYear()} All Rights Reserved.</p>
+          <span className="hidden sm:inline">•</span>
+          <p>
+            Designed by{" "}
+            <a
+              href="https://softtechseamless.onrender.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium underline hover:text-gray-300 transition-colors duration-200"
             >
-              {item.title}
-            </Link>
-          ))}
+              Softech Seamless
+            </a>
+          </p>
         </div>
       </div>
-      <div className="flex justify-center items-center border-t-1 border-t-gray-50  w-full pt-2 gap-0.5  pb-3 z-10">
-        <p className="text-sm text-white ">
-          &copy; {new Date().getFullYear()} All Rights Reserved.
-        </p>
-        <p className="text-sm text-white">
-          Designed by{" "}
-          <a
-            href="https://softtechseamless.onrender.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-md font-semibold text-white underline hover:text-gray-300"
-          >
-            Softech Seamless
-          </a>
-        </p>
-      </div>
-    </div>
+    </footer>
   );
 };
 

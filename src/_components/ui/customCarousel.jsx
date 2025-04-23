@@ -70,7 +70,7 @@ export default function CustomCarousel() {
   };
 
   return (
-    <div className=" w-full flex flex-col items-center pt-5 px-5 2xl:px-auto pb-12 bg-gray-50">
+    <div className=" w-full flex flex-col items-center pt-5 px-5 2xl:px-auto pb-12">
       {/* <div className="absolute inset-0 bg-[url('/diamondsbg.svg')] bg-cover opacity-40 z-0" /> */}
 
       <div

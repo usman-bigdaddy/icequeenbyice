@@ -221,7 +221,6 @@ const page = () => {
             </Link>
           </div>
         </div>
-
         <div
           ref={featuredRef}
           className={`relative mt-10 z-10 w-full flex flex-col justify-center items-center px-5 md:px-40 2xl:px-80  transition-all duration-1000 ease-in-out ${
