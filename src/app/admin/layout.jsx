@@ -36,13 +36,16 @@ const Layout = ({ children }) => {
   //     return redirect("/");
   //   }
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const router = useRouter();
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (
+      !isAuthenticated ||
+      (user.role !== "SUPER_ADMIN" && user.role !== "ADMIN")
+    ) {
       router.push("/sign-in");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user?.role, router]);
 
   if (!isAuthenticated) return null;
   return (

@@ -8,7 +8,7 @@ import { SparklesCore } from "./sparkles";
 const TextSection = () => {
   const { ref: textRef, isVisible: showText } = useInView();
   return (
-    <div className="relative bg-[#F9689F] w-full px-5 md:px-40 2xl:px-80 md:min-h-[600px] py-10 md:pt-30 md:pb-20 ">
+    <div className="relative bg-[#F9689F] w-full px-5 lg:px-40 2xl:px-80 md:min-h-[600px] py-10 md:pt-30 md:pb-20 ">
       <div className="w-full absolute inset-0 h-full z-0">
         <SparklesCore
           id="tsparticles"

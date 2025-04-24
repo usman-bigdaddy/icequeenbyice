@@ -9,7 +9,7 @@ import logo from "@/assets/logo22.svg";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SparklesCore } from "./sparkles";
-import CustomerSideBar from "./customerSidebar";
+import Sidebar from "./SideBar";
 import { IoIosArrowForward, IoMdMenu, IoMdClose } from "react-icons/io";
 import { loginWithGoogle } from "@/store/admin-auth/admin-auth-slice";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { get_all_products } from "@/store/customer/products/products-slice";
-import { AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineLogout, AiOutlineShoppingCart } from "react-icons/ai";
 import { IoFilterOutline } from "react-icons/io5";
 
 const CustomerNavBar = () => {
@@ -61,6 +61,39 @@ const CustomerNavBar = () => {
     dispatch(get_all_products());
   };
 
+  const SideBarLinks = [
+    { label: "Home", href: "/customer/home" },
+    { label: "Products", href: "/customer/product" },
+    { label: "Cart", href: "/customer/cart" },
+    ...(isAuthenticated
+      ? [{ label: "My Orders", href: "/customer/myorders" }]
+      : []),
+    { label: "About Us", href: "/customer/about" },
+    { label: "Contact Us", href: "/customer/contact" },
+  ];
+
+  const actions = isAuthenticated
+    ? [
+        {
+          label: "Shop Now",
+          icon: AiOutlineShoppingCart,
+          onClick: () => router.push("/customer/product"),
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-4",
+        },
+        {
+          label: "Logout",
+          onClick: handleLogout,
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-1",
+        },
+      ]
+    : [
+        {
+          label: "Sign In",
+          onClick: handleLoginWithGoogle,
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-4",
+        },
+      ];
+
   const [open, setOpen] = useState(false);
 
   const handleClick = (type) => {
@@ -82,9 +115,11 @@ const CustomerNavBar = () => {
         />
       </div>
 
-      <CustomerSideBar
+      <Sidebar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        links={SideBarLinks}
+        actions={actions}
       />
 
       <div className="flex flex-row sm:justify-between items-center gap-5 z-10">

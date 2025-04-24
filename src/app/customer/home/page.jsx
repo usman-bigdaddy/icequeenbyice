@@ -139,7 +139,7 @@ const page = () => {
         <div
           ref={newProductsRef}
           id="newProducts"
-          className={`relative z-10 w-full flex flex-col justify-center items-center px-5 md:px-40 2xl:px-80 pt-8 pb-8 transition-all duration-1000 ease-in-out ${
+          className={`relative z-10 w-full flex flex-col justify-center items-center px-5 lg:px-40 2xl:px-80 pt-8 pb-8 transition-all duration-1000 ease-in-out ${
             showNewProducts
               ? "opacity-100 translate-y-0 duration-500"
               : "opacity-0 translate-y-8"
@@ -223,7 +223,7 @@ const page = () => {
         </div>
         <div
           ref={featuredRef}
-          className={`relative mt-10 z-10 w-full flex flex-col justify-center items-center px-5 md:px-40 2xl:px-80  transition-all duration-1000 ease-in-out ${
+          className={`relative mt-10 z-10 w-full flex flex-col justify-center items-center px-5 lg:px-40 2xl:px-80  transition-all duration-1000 ease-in-out ${
             showFeatured
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-8"

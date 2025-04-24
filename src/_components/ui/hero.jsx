@@ -8,9 +8,7 @@ import header1 from "@/assets/header1.png";
 import { IoIosArrowForward, IoMdMenu, IoMdClose } from "react-icons/io";
 import { SparklesCore } from "@/_components/ui/sparkles";
 import { useState, useEffect } from "react";
-import clsx from "clsx";
-import CustomerSideBar from "./customerSidebar";
-import { FcGoogle } from "react-icons/fc";
+import SideBar from "./SideBar";
 import { loginWithGoogle } from "@/store/admin-auth/admin-auth-slice";
 import { useSelector, useDispatch } from "react-redux";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -56,6 +54,39 @@ const Hero = () => {
     dispatch(get_all_products());
   };
 
+  const SideBarLinks = [
+    { label: "Home", href: "/customer/home" },
+    { label: "Products", href: "/customer/product" },
+    { label: "Cart", href: "/customer/cart" },
+    ...(isAuthenticated
+      ? [{ label: "My Orders", href: "/customer/myorders" }]
+      : []),
+    { label: "About Us", href: "/customer/about" },
+    { label: "Contact Us", href: "/customer/contact" },
+  ];
+
+  const actions = isAuthenticated
+    ? [
+        {
+          label: "Shop Now",
+          icon: AiOutlineShoppingCart,
+          onClick: () => router.push("/customer/product"),
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-4",
+        },
+        {
+          label: "Logout",
+          onClick: handleLogout,
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-1",
+        },
+      ]
+    : [
+        {
+          label: "Sign In",
+          onClick: handleLoginWithGoogle,
+          className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-4",
+        },
+      ];
+
   const carouselItems = [
     {
       titleLines: ["Unleash Your Inner Diva!", "Discover the Latest Trends"],
@@ -77,7 +108,7 @@ const Hero = () => {
   const item = carouselItems[activeIndex];
 
   return (
-    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[55vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
+    <header className="bg-gradient-to-b from-[#DE0D6F] to-[#f7d2e9] h-[52vh] md:min-h-[80vh] lg:min-h-screen px-6 md:px-20 lg:px-40 relative overflow-hidden pt-2">
       <div className="w-full absolute inset-0 h-full z-0">
         <SparklesCore
           id="tsparticlesfullpage"
@@ -101,11 +132,12 @@ const Hero = () => {
         </div>
       )}
 
-      <CustomerSideBar
+      <SideBar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        links={SideBarLinks}
+        actions={actions}
       />
-
       <div className="flex justify-between items-center h-[6vh] md:h-[10vh] relative z-50">
         <Image
           src={logo}
@@ -206,7 +238,7 @@ const Hero = () => {
           key={`slide-${activeIndex}`}
           className="flex flex-row gap-0 md:gap-10 items-center justify-between w-full text-white animate-fade-in"
         >
-          <div className="w-[30%] md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2">
+          <div className="w-[28%] md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2">
             {item.titleLines.map((line, i) => (
               <p
                 key={i}
@@ -224,7 +256,7 @@ const Hero = () => {
             </Link>
           </div>
 
-          <div className="flex w-[70%] md:w-1/2 justify-center items-end">
+          <div className="flex w-[72%] md:w-1/2 justify-center items-end">
             <img
               src={item.image.src}
               alt={`carousel-${activeIndex}`}

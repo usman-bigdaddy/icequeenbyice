@@ -4,7 +4,7 @@ import { FaRegBell } from "react-icons/fa";
 import { Avatar, AvatarFallback } from "@/_components/ui/avatar";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { getUser } from "@/store/admin-auth/admin-auth-slice";
 import { get_pending_orders } from "@/store/orders/orders-thunks";
 import {
@@ -38,8 +38,11 @@ import { Form } from "@/components/ui/form";
 import { Change_Password_Schema } from "@/lib/form-schema";
 import { change_password } from "@/store/admin-auth/admin-auth-slice";
 import { useRouter } from "next/navigation";
+import { IoMdMenu } from "react-icons/io";
+import Sidebar from "../ui/SideBar";
 
 const Header = () => {
+  const [isSideOpen, setIsSideOpen] = useState(false);
   const { user, loading } = useSelector((state) => state.auth);
   const { pending_orders, fetched, isloading } = useSelector(
     (state) => state.order
@@ -59,6 +62,25 @@ const Header = () => {
   // );
 
   const router = useRouter();
+
+  const adminLinks = [
+    {
+      label: "Dashboard",
+      href: "/admin/dashboard",
+    },
+    {
+      label: "Products",
+      href: "/admin/products",
+    },
+    {
+      label: "Orders",
+      href: "/admin/orders",
+    },
+    {
+      label: "Users",
+      href: "/admin/users",
+    },
+  ];
 
   useEffect(() => {
     if (!fetched && !isloading) {
@@ -81,6 +103,14 @@ const Header = () => {
     dispatch({ type: "LOGOUT" });
     toast.warn("Logout successful");
   };
+
+  const action = [
+    {
+      label: "Logout",
+      onClick: handleLogout,
+      className: "bg-[#DE0D6F] text-white py-2 px-4 rounded-full mt-1",
+    },
+  ];
 
   const onSubmit = (values) => {
     if (values.password !== values.password2) {
@@ -117,7 +147,22 @@ const Header = () => {
             )}
           </div>
 
-          <div className="flex flex-row items-center space-x-2">
+          <div className="md:hidden pl-3">
+            <IoMdMenu
+              size={28}
+              className=" cursor-pointer"
+              onClick={() => setIsSideOpen(true)}
+            />
+          </div>
+
+          <Sidebar
+            isSidebarOpen={isSideOpen}
+            setIsSidebarOpen={setIsSideOpen}
+            links={adminLinks}
+            actions={action}
+          />
+
+          <div className="hidden md:flex flex-row items-center space-x-2">
             <Avatar>
               <AvatarFallback className="bg-amber-400">
                 {user?.name?.slice(0, 2).toUpperCase() || "IN"}
