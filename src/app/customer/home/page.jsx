@@ -146,7 +146,7 @@ const page = () => {
           }`}
         >
           <PageHeader
-            title="NEW PRODUCTS"
+            title="NEWESTS"
             subtitle="Discover the Latest Arrivals and Set the Trend."
           />
           <div className="w-full pb-3 md:pb-5">
@@ -231,7 +231,7 @@ const page = () => {
           id="featuredProducts"
         >
           <PageHeader
-            title="FEATURED PRODUCTS"
+            title="FEATURED"
             subtitle="Handpicked Just for You, Elevate Your Style."
           />
 

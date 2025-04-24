@@ -112,7 +112,7 @@ const page = () => {
             </div>
           ))}
         <PageHeader
-          title="Our Products"
+          title="Products"
           subtitle="Your curated selection of elegance."
         />
 

@@ -81,7 +81,7 @@ export default function CustomCarousel() {
         ref={trendingRef}
       >
         <PageHeader
-          title="Trending Outfits"
+          title="Trending"
           subtitle="Stay Ahead of the Curve with These Trending Pieces."
         />
 
@@ -169,7 +169,7 @@ export default function CustomCarousel() {
       </div>
       <Link
         className="px-4 py-2 rounded-xl bg-[#FD7DC3] mt-8 hover:animate-pulse"
-        href="#"
+        href="/customer/products"
       >
         View Our Store
       </Link>
