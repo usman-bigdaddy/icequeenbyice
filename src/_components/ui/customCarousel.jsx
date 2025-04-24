@@ -169,7 +169,7 @@ export default function CustomCarousel() {
       </div>
       <Link
         className="px-4 py-2 rounded-xl bg-[#FD7DC3] mt-8 hover:animate-pulse"
-        href="/customer/products"
+        href="/customer/product"
       >
         View Our Store
       </Link>
