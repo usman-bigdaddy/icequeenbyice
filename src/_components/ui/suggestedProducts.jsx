@@ -64,17 +64,20 @@ const SuggestedProducts = ({ bg, style }) => {
                   src={product?.images[0]}
                   className="h-[250px] w-full rounded-xl object-cover"
                 />
-              </Link>
-              <p className="text-pink-500 text-[16px] font-serif mt-1">
-                {product?.name}
-              </p>
-              <div className="flex flex-row justify-between items-center w-full mt-1">
-                <p className="text-[14px] font-semibold font-serif ">
-                  {Number(product?.price).toLocaleString("en-NG", {
-                    style: "currency",
-                    currency: "NGN",
-                  })}
+
+                <p className="text-pink-500 text-[16px] font-serif mt-1">
+                  {product?.name}
                 </p>
+              </Link>
+              <div className="flex flex-row justify-between items-center w-full mt-1">
+                <Link href={`/customer/product/${product?.id}`}>
+                  <p className="text-[14px] font-semibold font-serif ">
+                    {Number(product?.price).toLocaleString("en-NG", {
+                      style: "currency",
+                      currency: "NGN",
+                    })}
+                  </p>
+                </Link>
                 <Button
                   className="bg-gray-100 hover:bg-pink-50 rounded-full p-1.5 shadow-sm border border-gray-200 transition-colors hover:cursor-pointer"
                   onClick={() => addItemToCart(product?.id)}

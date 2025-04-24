@@ -251,7 +251,7 @@ const Hero = () => {
               href="/customer/product"
               className="mx-auto md:mx-0 w-full max-w-[220px] md:max-w-[250px] py-2 md:py-4 px-4 md:px-6 rounded-3xl bg-black/80 text-white text-sm md:text-base font-semibold hover:bg-white hover:text-[#F9689F] transition flex items-center justify-center gap-x-1 mt-4"
             >
-              <span className="truncate">Explore Our Collection</span>
+              <span className="truncate">Explore</span>
               <IoIosArrowForward size={16} />
             </Link>
           </div>

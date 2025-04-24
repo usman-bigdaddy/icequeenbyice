@@ -21,7 +21,7 @@ const FeaturedSection = ({ bestSellers }) => {
         className={`w-full flex flex-col justify-center items-center transition-all duration-1000 ease-in-out z-10 ${showBestSeller ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       >
         <PageHeader
-          title="Our Best Sellers"
+          title="Best Sellers"
           subtitle="Top Picks Loved by Our Customers — Shop the Best."
         />
 

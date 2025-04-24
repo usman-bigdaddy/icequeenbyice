@@ -218,7 +218,7 @@ const CartPage = () => {
       <div className="container mx-auto px-4 py-12 md:px-8 lg:px-16 relative z-10">
         {/* Header */}
         <PageHeader
-          title="My Cart"
+          title="Cart"
           subtitle="Your Perfect Selections Are Waiting for Checkout."
         />
 

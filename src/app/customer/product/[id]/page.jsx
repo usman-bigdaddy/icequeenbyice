@@ -191,7 +191,7 @@ const page = () => {
             </div>
 
             <Link
-              href="#"
+              href="/customer/cart"
               className="w-full py-2 border border-[#414141] rounded-3xl mt-4 text-center bg-white text-sm"
             >
               View Cart
@@ -205,9 +205,7 @@ const page = () => {
             </div>
             <div className="flex flex-row items-start gap-3 mt-2">
               <TbRotate3D className="size-6 text-[#DE0D6F]" />
-              <p className="text-[#414141] text-sm">
-                Delivers in: 3-7 Working Days
-              </p>
+              <p className="text-[#414141] text-sm">Delivers in: 1-2 Hours</p>
             </div>
           </div>
         </div>
