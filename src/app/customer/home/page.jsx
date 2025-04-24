@@ -221,100 +221,102 @@ const page = () => {
             </Link>
           </div>
         </div>
-        <div
-          ref={featuredRef}
-          className={`relative mt-10 z-10 w-full flex flex-col justify-center items-center px-5 md:px-40 2xl:px-80  transition-all duration-1000 ease-in-out ${
-            showFeatured
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-8"
-          }`}
-          id="featuredProducts"
-        >
-          <PageHeader
-            title="FEATURED"
-            subtitle="Handpicked Just for You, Elevate Your Style."
-          />
+        <div className="w-full mt-6 bg-gradient-to-b from-gray-100 to-gray-200 py-8">
+          <div
+            ref={featuredRef}
+            className={`relative mt-10 z-10 w-full flex flex-col justify-center items-center px-5 md:px-40 2xl:px-80  transition-all duration-1000 ease-in-out ${
+              showFeatured
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+            id="featuredProducts"
+          >
+            <PageHeader
+              title="FEATURED"
+              subtitle="Handpicked Just for You, Elevate Your Style."
+            />
 
-          <div className="w-full">
-            <Carousel
-              responsive={FeaturedResponsive}
-              arrows={true}
-              itemClass="px-2"
-              containerClass="gap-0"
-              customLeftArrow={<CustomLeftArrow />}
-              customRightArrow={<CustomRightArrow />}
-            >
-              {featuredProducts?.map((item) => (
-                <div
-                  key={item?.id}
-                  className="flex flex-col bg-gradient-to-b from-white to-[#FFB6C1] bg-opacity-30 py-2 px-2 rounded-lg 
+            <div className="w-full">
+              <Carousel
+                responsive={FeaturedResponsive}
+                arrows={true}
+                itemClass="px-2"
+                containerClass="gap-0"
+                customLeftArrow={<CustomLeftArrow />}
+                customRightArrow={<CustomRightArrow />}
+              >
+                {featuredProducts?.map((item) => (
+                  <div
+                    key={item?.id}
+                    className="flex flex-col bg-gradient-to-b from-white to-[#FFB6C1] bg-opacity-30 py-2 px-2 rounded-lg 
                   w-[160px] h-[260px] 
                  md:w-[250px] md:h-[380px]
                   2xl:w-[370px] 2xl:h-[500px] 
                   mx-auto"
-                  style={{
-                    background:
-                      "linear-gradient(to bottom, white 70%, rgba(255, 182, 193, 0.4) 100%)",
-                  }}
-                >
-                  <Link href={`/customer/product/${item?.id}`}>
-                    <img
-                      src={item?.images[0]}
-                      alt="product-image"
-                      className="w-[150px] h-[150px] 
+                    style={{
+                      background:
+                        "linear-gradient(to bottom, white 70%, rgba(255, 182, 193, 0.4) 100%)",
+                    }}
+                  >
+                    <Link href={`/customer/product/${item?.id}`}>
+                      <img
+                        src={item?.images[0]}
+                        alt="product-image"
+                        className="w-[150px] h-[150px] 
   md:w-[250px] md:h-[250px]
     2xl:w-[370px] 2xl:h-[370px] 
     object-cover rounded-lg"
-                      loading="lazy"
-                    />
-                  </Link>
-
-                  <div className="flex flex-col w-full pt-2">
-                    <Link href={`/customer/product/${item?.id}`}>
-                      <p className="text-sm md:text-lg md:font-semibold text-gray-800 md:h-[56px] overflow-hidden">
-                        {item?.name}
-                      </p>
+                        loading="lazy"
+                      />
                     </Link>
-                    <div className="flex flex-row justify-between items-center mt-5 md:mt-3">
+
+                    <div className="flex flex-col w-full pt-2">
                       <Link href={`/customer/product/${item?.id}`}>
-                        <div className="flex flex-row items-center gap-2">
-                          <Image
-                            src={naira}
-                            alt="naira-icon"
-                            className="size-7 md:size-10"
-                          />
-                          <p className="text-sm md:text-lg font-bold text-gray-700">
-                            {Number(item?.price).toLocaleString(undefined, {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
-                          </p>
-                        </div>
+                        <p className="text-sm md:text-lg md:font-semibold text-gray-800 md:h-[56px] overflow-hidden">
+                          {item?.name}
+                        </p>
                       </Link>
-                      <button
-                        className="bg-transparent"
-                        onClick={() => addItemToCart(item?.id)}
-                        disabled={addLoadingId === item.id}
-                      >
-                        {addLoadingId === item?.id ? (
-                          <div className="w-4 h-4 animate-spin border-2 border-pink-300 border-t-transparent rounded-full" />
-                        ) : (
-                          <FaCartArrowDown className="hover:cursor-pointer hover:animate-pulse size-[25px] md:size-[35px]" />
-                        )}
-                      </button>
+                      <div className="flex flex-row justify-between items-center mt-5 md:mt-3">
+                        <Link href={`/customer/product/${item?.id}`}>
+                          <div className="flex flex-row items-center gap-2">
+                            <Image
+                              src={naira}
+                              alt="naira-icon"
+                              className="size-7 md:size-10"
+                            />
+                            <p className="text-sm md:text-lg font-bold text-gray-700">
+                              {Number(item?.price).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </p>
+                          </div>
+                        </Link>
+                        <button
+                          className="bg-transparent"
+                          onClick={() => addItemToCart(item?.id)}
+                          disabled={addLoadingId === item.id}
+                        >
+                          {addLoadingId === item?.id ? (
+                            <div className="w-4 h-4 animate-spin border-2 border-pink-300 border-t-transparent rounded-full" />
+                          ) : (
+                            <FaCartArrowDown className="hover:cursor-pointer hover:animate-pulse size-[25px] md:size-[35px]" />
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </Carousel>
+                ))}
+              </Carousel>
 
-            <div className="flex justify-end z-10 w-full mt-10">
-              <Link
-                className="px-4 py-2 rounded-xl bg-[#FD7DC3] hover:animate-pulse text-white"
-                href="/customer/product"
-              >
-                View All Products
-              </Link>
+              <div className="flex justify-end z-10 w-full mt-10">
+                <Link
+                  className="px-4 py-2 rounded-xl bg-[#FD7DC3] hover:animate-pulse text-white"
+                  href="/customer/product"
+                >
+                  View All Products
+                </Link>
+              </div>
             </div>
           </div>
         </div>

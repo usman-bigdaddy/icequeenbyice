@@ -102,46 +102,40 @@ const VideoSection = () => {
 
         <div
           ref={subs}
-          className={`w-full mt-10 md:mt-20 rounded-[40px] relative bg-[#FDE7F2] transition-all duration-1000 ease-in-out z-10 ${
+          className={`w-full mx-auto mt-10 md:mt-20 rounded-3xl lg:rounded-[40px] relative bg-[#FDE7F2] transition-all duration-1000 ease-in-out z-10 max-w-7xl ${
             showSubs ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <div className="flex flex-col items-center text-center px-4 pt-10 md:pt-20 md:px-30">
-            <h2 className="text-2xl md:text-4xl font-semibold text-black mb-3">
+          <div className="flex flex-col items-center justify-center w-full px-6 sm:px-8 md:px-12 pt-10 md:pt-14 pb-10 md:pb-16 text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-3 leading-tight">
               Style delivered to your doorstep
             </h2>
-            <p className="text-sm md:text-base text-gray-700 font-light">
-              Subscribe to our newsletter for exclusive deals, fashion tips,
-            </p>
-            <p className="text-sm md:text-base text-gray-700 font-light">
-              and first access to our latest collections
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-6 px-4 md:pl-20 sm:py-4">
-            <Image
-              src={cart2}
-              alt="cart"
-              className="w-10 h-10 md:w-14 md:h-14"
-            />
-            <div className="flex w-full max-w-md gap-2 bg-white rounded-2xl px-4 py-3">
-              <input
-                type="email"
-                className="flex-1 bg-transparent p-2 text-sm focus:outline-none"
-                placeholder="Enter your email..."
-              />
-              <button className="bg-black text-white text-sm px-4 py-2 rounded-2xl hover:animate-pulse">
-                Subscribe
-              </button>
+            <div className="space-y-1 mb-6 md:mb-8">
+              <p className="text-sm sm:text-base text-gray-700 font-light">
+                Subscribe to our newsletter for exclusive deals, fashion tips,
+              </p>
+              <p className="text-sm sm:text-base text-gray-700 font-light">
+                and first access to our latest collections
+              </p>
             </div>
-          </div>
 
-          <div className="absolute right-0 bottom-0 z-0 hidden md:block">
-            <Image
-              src={subsImg}
-              alt="product"
-              className="w-[250px] h-[300px] object-contain"
-            />
+            {/* Email Input */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xl">
+              <div className="flex w-full bg-white rounded-xl lg:rounded-2xl px-4 py-2 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <input
+                  type="email"
+                  className="flex-1 bg-transparent p-2 text-sm sm:text-base focus:outline-none placeholder-gray-400"
+                  placeholder="Enter your email..."
+                  aria-label="Email address"
+                />
+                <button
+                  className="bg-gray-900 text-white text-sm sm:text-base px-4 py-2 rounded-xl hover:bg-gray-800 active:scale-95 transition-all duration-200"
+                  aria-label="Subscribe"
+                >
+                  Subscribe
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
