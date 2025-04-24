@@ -15,7 +15,7 @@ const SuggestedProducts = ({ bg, style }) => {
   const { bestSellers } = useSelector((state) => state.customerProducts);
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  const { addLoadingId, cartLoading } = useSelector((state) => state.cart);
+  const { addLoadingId } = useSelector((state) => state.cart);
 
   const userId = isAuthenticated ? user?.id : null;
   const guestId = !isAuthenticated ? getGuestId() : null;
@@ -23,11 +23,11 @@ const SuggestedProducts = ({ bg, style }) => {
 
   const addItemToCart = (productId) => {
     const userOrGuestId = isAuthenticated ? userId : guestId;
-    // const action = "increment";
-    const quantity = count[productId] || 1;
+    const action = "increment";
+
     const payload = {
       productId,
-      quantity,
+      action,
     };
 
     if (isAuthenticated && userOrGuestId) {
