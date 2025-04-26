@@ -95,12 +95,7 @@ const Hero = () => {
       image: header1,
     },
     {
-      titleLines: ["Step Into Elegance", "With Timeless Pieces"],
-      image: header2,
-    },
-    ,
-    {
-      titleLines: ["Unleash Your Inner Diva!", "Discover the Latest Trends"],
+      titleLines: ["Unleash Your Inner Diva!", "With Timeless Pieces"],
       image: header3,
     },
   ];

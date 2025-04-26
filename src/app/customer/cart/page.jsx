@@ -395,7 +395,9 @@ const CartPage = () => {
                   Discover our collection and add some elegant pieces
                 </p>
                 <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-pink-400 text-white rounded-full hover:shadow-lg transition-all duration-300">
-                  Browse Collections
+                  <Link href="/customer/product" passHref>
+                    Browse Collections
+                  </Link>
                 </button>
               </div>
             )}
