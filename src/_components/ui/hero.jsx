@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import header1 from "@/assets/header1.png";
+import shoppingbag from "@/assets/shopping-bag.png";
 import { IoIosArrowForward, IoMdMenu, IoMdClose } from "react-icons/io";
 import { SparklesCore } from "@/_components/ui/sparkles";
 import { useState, useEffect } from "react";
@@ -90,7 +91,7 @@ const Hero = () => {
   const carouselItems = [
     {
       titleLines: ["Unleash Your Inner Diva!", "Discover the Latest Trends"],
-      image: header1,
+      image: shoppingbag,
     },
     {
       titleLines: ["Step Into Elegance", "With Timeless Pieces"],
