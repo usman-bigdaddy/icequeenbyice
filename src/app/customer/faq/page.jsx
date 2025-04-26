@@ -99,7 +99,7 @@ export default function FAQPage() {
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
       <section className="container mx-auto px-6 py-6">
         <PageSectionHeader
-          title="Frequently Asked Questions"
+          title="FAQ's"
           subtitle="We have answers to the most common questions"
         />
         <div className="max-w-4xl mx-auto space-y-8">
