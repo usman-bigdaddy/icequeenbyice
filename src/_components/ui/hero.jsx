@@ -141,13 +141,15 @@ const Hero = () => {
         actions={actions}
       />
       <div className="flex justify-between items-center h-[6vh] md:h-[10vh] relative z-50">
-        <Image
-          src={logo}
-          alt="logo"
-          height={100}
-          width={100}
-          className="w-20 md:w-40"
-        />
+        <Link href="/customer/home">
+          <Image
+            src={logo}
+            alt="logo"
+            height={100}
+            width={100}
+            className="w-20 md:w-40"
+          />
+        </Link>
         <div className="hidden md:flex gap-6 items-center text-white text-base font-semibold font-rubik z-50">
           <Link href="/customer/home" className="border-b-1 border-b-white">
             Home

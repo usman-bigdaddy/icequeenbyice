@@ -44,12 +44,15 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 z-10">
         {/* Logo */}
         <div className="flex justify-center md:justify-start">
-          <Image
-            src={logo}
-            alt="logo"
-            className="w-44 md:w-52 h-auto max-h-24 object-contain"
-            priority
-          />
+          <Link href="/customer/home">
+            {" "}
+            <Image
+              src={logo}
+              alt="logo"
+              className="w-44 md:w-52 h-auto max-h-24 object-contain"
+              priority
+            />
+          </Link>
         </div>
 
         {/* Links grid */}
@@ -129,7 +132,7 @@ const Footer = () => {
           <p>
             Designed by{" "}
             <a
-              href="https://softtechseamless.onrender.com/"
+              href="https://www.softechseamless.com.ng/"
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium underline hover:text-gray-300 transition-colors duration-200"

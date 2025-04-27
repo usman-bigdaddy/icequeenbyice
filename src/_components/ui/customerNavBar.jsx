@@ -66,10 +66,10 @@ const CustomerNavBar = () => {
     { label: "Products", href: "/customer/product" },
     { label: "Cart", href: "/customer/cart" },
     ...(isAuthenticated
-      ? [{ label: "My Orders", href: "/customer/myorders" }]
+      ? [{ label: "Orders", href: "/customer/myorders" }]
       : []),
-    { label: "About Us", href: "/customer/about" },
-    { label: "Contact Us", href: "/customer/contact" },
+    { label: "About", href: "/customer/about" },
+    { label: "Contact", href: "/customer/contact" },
   ];
 
   const actions = isAuthenticated
@@ -123,7 +123,9 @@ const CustomerNavBar = () => {
       />
 
       <div className="flex flex-row sm:justify-between items-center gap-5 z-10">
-        <Image src={logo} alt="logo" className="w-[120px] md:w-[200px]" />
+        <Link href="/customer/home">
+          <Image src={logo} alt="logo" className="w-[120px] md:w-[200px]" />
+        </Link>
         <div className="hidden md:flex flex-row gap-5">
           {navLinks.map((link, index) => (
             <Link
