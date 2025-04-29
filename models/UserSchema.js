@@ -21,11 +21,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minLength: [4, "Password must be at least 4 characters long"],
     },
-    role: {
-      type: String,
-      enum: ["customer", "admin"],
-      default: "customer",
-    },
+    image: {type: String},
     createdAt: {
       type: Date,
       default: Date.now,
@@ -33,20 +29,5 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // Skip if password isn't modified
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-UserSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);
