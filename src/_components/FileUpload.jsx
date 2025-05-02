@@ -1,163 +1,154 @@
 "use client";
 
-import { IKImage, ImageKitProvider, IKUpload, IKVideo } from "imagekitio-next";
-import config from "@/lib/config";
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { toast } from "react-toastify";
+import config from "@/lib/config";
 
 const {
   env: { apiEndpoint, imagekit },
 } = config;
 
-const { publicKey, urlEndpoint } = imagekit;
+const { urlEndpoint } = imagekit;
 
-const authenticator = async () => {
-  try {
-    const response = await fetch(`/api/imagekit`);
+const FileUpload = ({ folder = "uploads", onUploadComplete }) => {
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const inputRef = useRef(null);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Request failed with status ${response.status}: ${errorText}`
-      );
-    }
+  const handleFileChange = (incomingFiles) => {
+    const newFiles = Array.from(incomingFiles);
+    const validImages = newFiles.filter((file) => file.type.startsWith("image/"));
 
-    const data = await response.json();
-
-    if (!data.signature || !data.token || !data.expire) {
-      throw new Error("Missing required authentication parameters.");
-    }
-
-    return {
-      token: data.token,
-      expire: data.expire,
-      signature: data.signature,
-    };
-  } catch (error) {
-    toast.error(`Authentication request failed: ${error.message}`);
-    return null;
-  }
-};
-
-const FileUpload = ({
-  type,
-  accept,
-  placeholder,
-  folder,
-  onFileChange,
-  value,
-}) => {
-  const ikUploadRef = useRef(null);
-  const [file, setFile] = useState({ filePath: value ?? null });
-  const [progress, setProgress] = useState(0);
-
-  const styles = {
-    button: "bg-light-600 border-gray-100 border",
-    placeholder: "text-slate-500",
-    text: "text-dark-400",
+    setFiles((prev) => [...prev, ...validImages]);
+    setPreviews((prev) => [
+      ...prev,
+      ...validImages.map((file) => URL.createObjectURL(file)),
+    ]);
   };
 
-  const onError = (error) => {
-    toast.error(`${type} upload failed: ${error.message}`);
+  const handleDrop = (e) => {
+    e.preventDefault();
+    handleFileChange(e.dataTransfer.files);
   };
 
-  const onSuccess = (res) => {
-    toast.success(`Image uploaded successfully`);
-    setFile(res);
-
-    // Create the full image URL by combining the urlEndpoint and filePath
-    const fullImageUrl = `${urlEndpoint}${res.filePath}`;
-    onFileChange(fullImageUrl); // Pass the full URL to the parent component
+  const handleRemoveImage = (index) => {
+    const updatedFiles = [...files];
+    const updatedPreviews = [...previews];
+    updatedFiles.splice(index, 1);
+    updatedPreviews.splice(index, 1);
+    setFiles(updatedFiles);
+    setPreviews(updatedPreviews);
   };
 
-  const onValidate = (file) => {
-    if (type === "image" && file.size > 20 * 1024 * 1024) {
-      toast.warn(
-        "File size too large: Please upload a file that is less than 20MB."
-      );
-      return false;
+  const uploadToImageKit = async (file) => {
+    try {
+      const authRes = await fetch(`${apiEndpoint}/api/imagekit`);
+      const authData = await authRes.json();
+
+      if (!authData.signature || !authData.token || !authData.expire) {
+        throw new Error("Missing ImageKit auth data");
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", file.name);
+      formData.append("useUniqueFileName", "true");
+      formData.append("folder", folder);
+      formData.append("publicKey", imagekit.publicKey);
+      formData.append("signature", authData.signature);
+      formData.append("expire", authData.expire);
+      formData.append("token", authData.token);
+
+      const res = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Upload failed");
+
+      return data.url;
+    } catch (error) {
+      toast.error(error.message || "Image upload failed");
+      return null;
     }
-    if (type === "video" && file.size > 50 * 1024 * 1024) {
-      toast.warn(
-        "File size too large: Please upload a file that is less than 50MB."
-      );
-      return false;
+  };
+
+  const handleSubmit = async () => {
+    if (!files.length) {
+      toast.warn("No images selected to upload.");
+      return;
     }
-    return true;
+
+    setUploading(true);
+    const uploadedUrls = [];
+
+    for (const file of files) {
+      const url = await uploadToImageKit(file);
+      if (url) uploadedUrls.push(url);
+    }
+
+    setUploading(false);
+
+    if (uploadedUrls.length) {
+      toast.success("All images uploaded!");
+      onUploadComplete?.(uploadedUrls);
+      setFiles([]);
+      setPreviews([]);
+    }
   };
 
   return (
-    <ImageKitProvider
-      publicKey={publicKey}
-      urlEndpoint={urlEndpoint} // Pass urlEndpoint to ImageKitProvider
-      authenticator={authenticator}
-    >
-      <IKUpload
-        ref={ikUploadRef}
-        onError={onError}
-        onSuccess={onSuccess}
-        useUniqueFileName={true}
-        validateFile={onValidate}
-        onUploadStart={() => setProgress(0)}
-        onUploadProgress={({ loaded, total }) => {
-          const percent = Math.round((loaded / total) * 100);
-          setProgress(percent);
-        }}
-        folder={folder}
-        accept={accept}
-        className="hidden"
-      />
-
-      <button
-        className={cn("upload-btn", styles.button)}
-        onClick={(e) => {
-          e.preventDefault();
-          if (!ikUploadRef.current) {
-            toast.error("Upload input not initialized!");
-            return;
-          }
-          ikUploadRef.current.click();
-        }}
+    <div>
+      <div
+        className="border-dashed border-2 border-gray-400 p-6 rounded-md text-center cursor-pointer"
+        onClick={() => inputRef.current?.click()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
       >
-        <Image
-          src="/icons/upload.svg"
-          alt="upload-icon"
-          width={20}
-          height={20}
-          className="object-contain"
+        <p className="text-gray-600">Drag and drop images here, or click to select</p>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          ref={inputRef}
+          className="hidden"
+          onChange={(e) => handleFileChange(e.target.files)}
         />
-        <p className={cn("text-base", styles.placeholder)}>{placeholder}</p>
-        {file.filePath && (
-          <p className={cn("upload-filename", styles.text)}>{file.filePath}</p>
-        )}
-      </button>
+      </div>
 
-      {progress > 0 && progress !== 100 && (
-        <div className="w-full rounded-full bg-green-200">
-          <div className="progress" style={{ width: `${progress}%` }}>
-            {progress}%
-          </div>
+      {previews.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {previews.map((src, index) => (
+            <div key={index} className="relative group">
+              <Image
+                src={src}
+                alt={`preview-${index}`}
+                width={120}
+                height={120}
+                className="object-cover rounded border"
+              />
+              <button
+                onClick={() => handleRemoveImage(index)}
+                className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 text-xs opacity-75 group-hover:opacity-100"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
         </div>
       )}
 
-      {file.filePath &&
-        (type === "image" ? (
-          <IKImage
-            alt={file.filePath}
-            path={file.filePath}
-            width={500}
-            height={300}
-          />
-        ) : type === "video" ? (
-          <IKVideo
-            path={file.filePath}
-            controls={true}
-            className="h-96 w-full rounded-xl"
-          />
-        ) : null)}
-    </ImageKitProvider>
+      <button
+        onClick={handleSubmit}
+        disabled={!files.length || uploading}
+        className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
+      >
+        {uploading ? "Uploading..." : "Submit Images"}
+      </button>
+    </div>
   );
 };
 
