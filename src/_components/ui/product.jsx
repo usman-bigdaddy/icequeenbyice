@@ -37,6 +37,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Product_Schema } from "@/lib/form-schema";
 import Formfield from "./formField";
 import FileUpload from "../FileUpload";
+import config from "@/lib/config";
 
 const Product = ({
   defaultValues,
@@ -68,29 +69,73 @@ const Product = ({
 
   const dispatch = useDispatch();
 
-  const onSubmit = (values) => {
-    if (btnTxt === "Add Product") {
-      const payload = {
-        name: values.name,
-        description: values.description,
-        size: values.size,
-        width: values.width,
-        length: Number(values.length) || 0,
-        quantity: values.quantity,
-        fabricType: values.fabricType,
-        featured: values.featured,
-        bestSeller: values.bestSeller,
-        trending: values.trending,
-        price: values.price,
-        visibility: true,
-        images: photos && photos.length > 0 ? photos : [],
-      };
+  const { publicKey, privateKey } = config.env.imagekit;
 
-      dispatch(create_product(payload));
-      form.reset();
-    } else {
-      dispatch(edit_product({ product_id, data: values }));
+  const uploadToImageKit = async (file) => {
+    try {
+      // Fetch authentication data from your server
+      const authRes = await fetch(`${config.env.apiEndpoint}/api/imagekit`);
+      const authData = await authRes.json();
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", file.name);
+      formData.append("useUniqueFileName", "true");
+      formData.append("folder", "products");
+      les;
+      formData.append("publicKey", config.env.imagekit.publicKey);
+      formData.append("signature", authData.signature);
+      formData.append("expire", authData.expire);
+      formData.append("token", authData.token);
+
+      const res = await fetch(
+        "https://upload.imagekit.io/api/v1/files/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Upload failed");
+
+      return data.url;
+    } catch (error) {
+      console.error("Image upload failed:", error.message);
+      return null;
     }
+  };
+
+  const onSubmit = async (values) => {
+    let uploadedUrls = [];
+
+    if (photos.length > 0) {
+      try {
+        const uploads = await Promise.all(
+          photos.map((file) => uploadToImageKit(file))
+        );
+        uploadedUrls = uploads;
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        return;
+      }
+    }
+
+    const payload = {
+      ...values,
+      length: Number(values.length) || 0,
+      visibility: true,
+      images: uploadedUrls,
+    };
+
+    if (btnTxt === "Add Product") {
+      dispatch(create_product(payload));
+    } else {
+      dispatch(edit_product({ product_id, data: payload }));
+    }
+
+    form.reset();
+    setPhotos([]);
   };
 
   useEffect(() => {
@@ -290,16 +335,7 @@ const Product = ({
                   <h2 className="text-gray-700 font-md text-lg">
                     Display and Pricing
                   </h2>
-                  <FileUpload
-                    type="image"
-                    accept="image/*"
-                    placeholder="Upload an image"
-                    folder="/images"
-                    onFileChange={(filePath) => {
-                      console.log("filepath:", filePath);
-                      setPhotos((prev) => [...prev, filePath]);
-                    }}
-                  />
+                  <FileUpload onFilesSelected={setPhotos} />
                   {/* <Formfield
                     name="image"
                     control={form.control}

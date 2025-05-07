@@ -1,103 +1,34 @@
-"use client";
-
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { toast } from "react-toastify";
-import config from "@/lib/config";
 
-const {
-  env: { apiEndpoint, imagekit },
-} = config;
-
-const { urlEndpoint } = imagekit;
-
-const FileUpload = ({ folder = "uploads", onUploadComplete }) => {
-  const [files, setFiles] = useState([]);
-  const [previews, setPreviews] = useState([]);
-  const [uploading, setUploading] = useState(false);
+const FileUpload = ({ onFilesSelected }) => {
+  const [selectedFiles, setSelectedFiles] = useState([]); // Array of file objects
+  const [previews, setPreviews] = useState([]); // Array of preview URLs
   const inputRef = useRef(null);
 
   const handleFileChange = (incomingFiles) => {
-    const newFiles = Array.from(incomingFiles);
-    const validImages = newFiles.filter((file) => file.type.startsWith("image/"));
+    const newFiles = Array.from(incomingFiles).filter((file) =>
+      file.type.startsWith("image/")
+    );
 
-    setFiles((prev) => [...prev, ...validImages]);
-    setPreviews((prev) => [
-      ...prev,
-      ...validImages.map((file) => URL.createObjectURL(file)),
-    ]);
+    const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+    setSelectedFiles((prev) => [...prev, ...newFiles]);
+    setPreviews((prev) => [...prev, ...newPreviews]);
+
+    onFilesSelected([...selectedFiles, ...newFiles]); // Update parent
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    handleFileChange(e.dataTransfer.files);
-  };
+  const handleRemove = (indexToRemove) => {
+    const updatedFiles = selectedFiles.filter((_, i) => i !== indexToRemove);
+    const updatedPreviews = previews.filter((_, i) => i !== indexToRemove);
 
-  const handleRemoveImage = (index) => {
-    const updatedFiles = [...files];
-    const updatedPreviews = [...previews];
-    updatedFiles.splice(index, 1);
-    updatedPreviews.splice(index, 1);
-    setFiles(updatedFiles);
+    // Clean up object URL to prevent memory leaks
+    URL.revokeObjectURL(previews[indexToRemove]);
+
+    setSelectedFiles(updatedFiles);
     setPreviews(updatedPreviews);
-  };
 
-  const uploadToImageKit = async (file) => {
-    try {
-      const authRes = await fetch(`${apiEndpoint}/api/imagekit`);
-      const authData = await authRes.json();
-
-      if (!authData.signature || !authData.token || !authData.expire) {
-        throw new Error("Missing ImageKit auth data");
-      }
-
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("fileName", file.name);
-      formData.append("useUniqueFileName", "true");
-      formData.append("folder", folder);
-      formData.append("publicKey", imagekit.publicKey);
-      formData.append("signature", authData.signature);
-      formData.append("expire", authData.expire);
-      formData.append("token", authData.token);
-
-      const res = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Upload failed");
-
-      return data.url;
-    } catch (error) {
-      toast.error(error.message || "Image upload failed");
-      return null;
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!files.length) {
-      toast.warn("No images selected to upload.");
-      return;
-    }
-
-    setUploading(true);
-    const uploadedUrls = [];
-
-    for (const file of files) {
-      const url = await uploadToImageKit(file);
-      if (url) uploadedUrls.push(url);
-    }
-
-    setUploading(false);
-
-    if (uploadedUrls.length) {
-      toast.success("All images uploaded!");
-      onUploadComplete?.(uploadedUrls);
-      setFiles([]);
-      setPreviews([]);
-    }
+    onFilesSelected(updatedFiles); // Update parent
   };
 
   return (
@@ -106,9 +37,14 @@ const FileUpload = ({ folder = "uploads", onUploadComplete }) => {
         className="border-dashed border-2 border-gray-400 p-6 rounded-md text-center cursor-pointer"
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
-        onDrop={handleDrop}
+        onDrop={(e) => {
+          e.preventDefault();
+          handleFileChange(e.dataTransfer.files);
+        }}
       >
-        <p className="text-gray-600">Drag and drop images here, or click to select</p>
+        <p className="text-gray-600">
+          Drag and drop images here, or click to select
+        </p>
         <input
           type="file"
           accept="image/*"
@@ -121,33 +57,26 @@ const FileUpload = ({ folder = "uploads", onUploadComplete }) => {
 
       {previews.length > 0 && (
         <div className="grid grid-cols-3 gap-4 mt-4">
-          {previews.map((src, index) => (
-            <div key={index} className="relative group">
+          {previews.map((src, idx) => (
+            <div key={idx} className="relative group">
               <Image
                 src={src}
-                alt={`preview-${index}`}
+                alt="preview"
                 width={120}
                 height={120}
-                className="object-cover rounded border"
+                className="rounded"
               />
               <button
-                onClick={() => handleRemoveImage(index)}
-                className="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 text-xs opacity-75 group-hover:opacity-100"
+                type="button"
+                onClick={() => handleRemove(idx)}
+                className="absolute top-0 right-0 bg-black bg-opacity-60 text-white rounded-full px-2 py-0.5 text-sm hover:bg-opacity-80"
               >
-                ✕
+                ×
               </button>
             </div>
           ))}
         </div>
       )}
-
-      <button
-        onClick={handleSubmit}
-        disabled={!files.length || uploading}
-        className="mt-6 bg-blue-600 text-white px-6 py-2 rounded disabled:opacity-50"
-      >
-        {uploading ? "Uploading..." : "Submit Images"}
-      </button>
     </div>
   );
 };
